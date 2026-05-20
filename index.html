@@ -1051,7 +1051,7 @@
       } else {
         const res  = await fetch(CONFIG.bookingWebhookUrl, {
           method:  'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 'Content-Type': 'text/plain' },
           body:    JSON.stringify(payload)
         });
         const data = await res.json();
