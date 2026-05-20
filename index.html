@@ -1,875 +1,1118 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Gramans Group — Interview Scheduler</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --sky: #8BB8D4;
-    --sky-light: #EBF3F8;
-    --sky-mid: #C5DCE9;
-    --ink: #111111;
-    --ink2: #444444;
-    --ink3: #888888;
-    --border: #DEDEDE;
-    --border2: #ECECEC;
-    --white: #FFFFFF;
-    --off: #F9F9F9;
-  }
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    font-family: 'Jost', sans-serif;
-    background: var(--white);
-    color: var(--ink);
-    min-height: 100vh;
-  }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Schedule Your Interview — Gramans Group</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* ── Design Tokens ─────────────────────────────────────────── */
+    :root {
+      --teal:        #0f4c81;
+      --teal-dark:   #083358;
+      --teal-mid:    #1565a8;
+      --teal-light:  #1a75c4;
+      --teal-pale:   #bfdbfe;
+      --teal-faint:  #eff6ff;
+      --white:       #ffffff;
+      --gray-50:     #f7fafc;
+      --gray-100:    #edf2f7;
+      --gray-200:    #e2e8f0;
+      --gray-300:    #cbd5e0;
+      --gray-400:    #a0aec0;
+      --gray-500:    #718096;
+      --gray-600:    #4a5568;
+      --gray-700:    #2d3748;
+      --gray-900:    #1a202c;
+      --success:     #276749;
+      --success-bg:  #f0fff4;
+      --success-bd:  #9ae6b4;
+      --error:       #c53030;
+      --error-bg:    #fff5f5;
+      --error-bd:    #fc8181;
+      --warn-bg:     #fffbea;
+      --warn-bd:     #f6e05e;
+      --warn-text:   #7b5e00;
+      --shadow:      0 8px 32px rgba(15,76,129,0.12), 0 2px 8px rgba(0,0,0,0.06);
+      --radius:      14px;
+      --radius-sm:   8px;
+      --radius-xs:   6px;
+    }
 
-  /* ── Header ── */
-  .header {
-    background: var(--white);
-    border-bottom: 1px solid var(--border);
-    padding: 0 48px;
-    height: 72px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  .logo {
-    display: flex;
-    align-items: center;
-    gap: 0;
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 22px;
-    font-weight: 500;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--ink);
-  }
-  .logo-divider {
-    width: 1px;
-    height: 28px;
-    background: var(--sky);
-    margin: 0 14px;
-  }
-  .header-tag {
-    font-family: 'Jost', sans-serif;
-    font-size: 11px;
-    font-weight: 400;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--ink3);
-    border: 1px solid var(--border);
-    padding: 5px 14px;
-    border-radius: 2px;
-  }
+    /* ── Reset ─────────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { -webkit-text-size-adjust: 100%; }
+    body {
+      font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+      background: var(--teal-faint);
+      color: var(--gray-900);
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+    button { font-family: inherit; cursor: pointer; }
 
-  /* ── Banner ── */
-  .banner {
-    background: var(--ink);
-    color: var(--white);
-    padding: 48px 48px 52px;
-    position: relative;
-    overflow: hidden;
-  }
-  .banner::before {
-    content: '';
-    position: absolute;
-    top: 0; right: 0;
-    width: 340px;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(139,184,212,0.07));
-    pointer-events: none;
-  }
-  .banner-eyebrow {
-    font-size: 10px;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--sky);
-    margin-bottom: 14px;
-    font-weight: 400;
-  }
-  .banner h1 {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: clamp(30px, 4vw, 46px);
-    font-weight: 400;
-    letter-spacing: 0.02em;
-    line-height: 1.15;
-    color: var(--white);
-    margin-bottom: 14px;
-  }
-  .banner h1 em { color: var(--sky); font-style: italic; font-weight: 400; }
-  .banner p {
-    font-size: 14px;
-    font-weight: 300;
-    color: rgba(255,255,255,0.55);
-    max-width: 480px;
-    line-height: 1.7;
-    letter-spacing: 0.02em;
-  }
+    /* ── Page wrapper ──────────────────────────────────────────── */
+    .page {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 32px 16px 60px;
+    }
 
-  /* ── Dev note ── */
-  .dev-note {
-    background: #FFFBEB;
-    border-bottom: 1px solid #F0E4A0;
-    padding: 10px 48px;
-    font-size: 11px;
-    color: #666;
-    letter-spacing: 0.02em;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .dev-note code { font-size: 10px; background: rgba(0,0,0,0.06); padding: 1px 5px; border-radius: 2px; }
+    /* ── Main card ─────────────────────────────────────────────── */
+    .booking-card {
+      width: 100%;
+      max-width: 980px;
+      background: var(--white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      display: flex;
+      min-height: 600px;
+    }
 
-  /* ── Step bar ── */
-  .step-bar {
-    border-bottom: 1px solid var(--border);
-    padding: 0 48px;
-    display: flex;
-    align-items: stretch;
-    height: 52px;
-    gap: 0;
-  }
-  .step-tab {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 0 20px 0 0;
-    font-size: 11px;
-    font-weight: 400;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--ink3);
-    border-bottom: 2px solid transparent;
-    margin-bottom: -1px;
-    transition: all .2s;
-  }
-  .step-tab.active { color: var(--ink); border-bottom-color: var(--sky); }
-  .step-tab.done { color: var(--sky); }
-  .step-num {
-    width: 22px;
-    height: 22px;
-    border-radius: 50%;
-    border: 1px solid currentColor;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 10px;
-    flex-shrink: 0;
-  }
-  .step-tab.done .step-num { background: var(--sky); border-color: var(--sky); color: white; }
-  .step-tab.active .step-num { background: var(--ink); border-color: var(--ink); color: white; }
-  .step-sep { width: 24px; display: flex; align-items: center; justify-content: center; color: var(--border); font-size: 12px; }
+    /* ── LEFT PANEL ────────────────────────────────────────────── */
+    .left-panel {
+      width: 300px;
+      flex-shrink: 0;
+      background: linear-gradient(160deg, var(--teal-dark) 0%, var(--teal) 60%, var(--teal-mid) 100%);
+      padding: 40px 32px;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+    }
+    /* decorative circles */
+    .left-panel::before,
+    .left-panel::after {
+      content: '';
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.04);
+    }
+    .left-panel::before { width: 260px; height: 260px; top: -80px; right: -80px; }
+    .left-panel::after  { width: 180px; height: 180px; bottom: -40px; left: -60px; }
 
-  /* ── Layout ── */
-  .layout {
-    display: grid;
-    grid-template-columns: 1fr 320px;
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 40px 48px 60px;
-    gap: 40px;
-    align-items: start;
-  }
-  @media (max-width: 820px) {
-    .layout { grid-template-columns: 1fr; padding: 24px 20px 48px; }
-    .header, .banner, .dev-note, .step-bar { padding-left: 20px; padding-right: 20px; }
-  }
+    /* Logo area */
+    .logo-area {
+      display: flex;
+      align-items: center;
+      margin-bottom: 36px;
+      position: relative;
+      z-index: 1;
+    }
+    /* White pill keeps the logo exactly as designed against the blue bg */
+    .logo-pill {
+      background: #ffffff;
+      border-radius: 10px;
+      padding: 12px 20px;
+      display: inline-flex;
+      align-items: center;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.18);
+    }
+    .company-logo {
+      height: 52px;
+      width: auto;
+      max-width: 220px;
+      object-fit: contain;
+      display: block;
+    }
+    /* Text fallback if logo file is missing */
+    .logo-text-fallback {
+      display: none;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--white);
+      letter-spacing: -0.02em;
+    }
 
-  /* ── Sections ── */
-  .section { margin-bottom: 32px; }
-  .section-header {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 20px;
-    padding-bottom: 14px;
-    border-bottom: 1px solid var(--border2);
-  }
-  .section-num {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 13px;
-    color: var(--sky);
-    font-style: italic;
-    min-width: 20px;
-  }
-  .section-title {
-    font-size: 11px;
-    font-weight: 500;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--ink2);
-  }
+    /* Panel heading */
+    .panel-heading {
+      position: relative;
+      z-index: 1;
+      margin-bottom: 28px;
+    }
+    .panel-heading h2 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--white);
+      line-height: 1.3;
+      margin-bottom: 6px;
+    }
+    .panel-heading p {
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.65);
+      line-height: 1.5;
+    }
 
-  /* ── Form ── */
-  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-  @media (max-width: 500px) { .form-grid { grid-template-columns: 1fr; } }
-  .field { display: flex; flex-direction: column; gap: 6px; }
-  .field.full { grid-column: 1 / -1; }
-  label {
-    font-size: 10px;
-    font-weight: 500;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--ink3);
-  }
-  input, select {
-    height: 44px;
-    padding: 0 14px;
-    border: 1px solid var(--border);
-    border-radius: 2px;
-    font-family: 'Jost', sans-serif;
-    font-size: 14px;
-    font-weight: 300;
-    color: var(--ink);
-    background: var(--white);
-    transition: border-color .15s, box-shadow .15s;
-    outline: none;
-    -webkit-appearance: none;
-  }
-  input:focus, select:focus { border-color: var(--sky); box-shadow: 0 0 0 3px rgba(139,184,212,0.15); }
-  input::placeholder { color: var(--border); }
-  .err-msg { font-size: 10px; color: #C0392B; letter-spacing: 0.04em; margin-top: 2px; display: none; }
-  .has-error input, .has-error select { border-color: #C0392B; }
-  .has-error .err-msg { display: block; }
+    /* Divider */
+    .panel-divider {
+      height: 1px;
+      background: rgba(255,255,255,0.15);
+      margin-bottom: 28px;
+      position: relative;
+      z-index: 1;
+    }
 
-  /* ── Calendar ── */
-  .cal-nav {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 18px;
-  }
-  .cal-month-label {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 20px;
-    font-weight: 500;
-    color: var(--ink);
-    letter-spacing: 0.03em;
-  }
-  .cal-btn {
-    width: 32px;
-    height: 32px;
-    border: 1px solid var(--border);
-    background: none;
-    cursor: pointer;
-    border-radius: 2px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 14px;
-    color: var(--ink2);
-    transition: all .15s;
-  }
-  .cal-btn:hover { background: var(--ink); color: var(--white); border-color: var(--ink); }
-  .cal-dow-row {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 3px;
-    margin-bottom: 4px;
-  }
-  .cal-dow {
-    text-align: center;
-    font-size: 9px;
-    font-weight: 500;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--ink3);
-    padding: 4px 0;
-  }
-  .cal-grid {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 3px;
-  }
-  .cal-day {
-    aspect-ratio: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 13px;
-    border-radius: 2px;
-    cursor: default;
-    color: var(--border);
-    font-weight: 300;
-    position: relative;
-  }
-  .cal-day.avail {
-    color: var(--ink);
-    cursor: pointer;
-    border: 1px solid var(--border);
-    font-weight: 400;
-    transition: all .15s;
-  }
-  .cal-day.avail:hover { border-color: var(--sky); color: var(--sky); background: var(--sky-light); }
-  .cal-day.sel { background: var(--ink) !important; color: var(--white) !important; border-color: var(--ink) !important; }
-  .cal-day.today::after {
-    content: '';
-    position: absolute;
-    bottom: 3px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 3px;
-    height: 3px;
-    border-radius: 50%;
-    background: var(--sky);
-  }
-  .cal-day.sel::after { background: rgba(255,255,255,0.5); }
-  .cal-legend {
-    display: flex;
-    gap: 18px;
-    margin-top: 14px;
-    font-size: 10px;
-    color: var(--ink3);
-    letter-spacing: 0.06em;
-  }
-  .cal-leg { display: flex; align-items: center; gap: 6px; }
-  .cal-leg-dot { width: 10px; height: 10px; border-radius: 1px; }
+    /* Info list */
+    .info-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      position: relative;
+      z-index: 1;
+      flex: 1;
+    }
+    .info-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+    .info-icon {
+      width: 34px;
+      height: 34px;
+      background: rgba(255,255,255,0.12);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 1rem;
+    }
+    .info-content { line-height: 1; }
+    .info-label {
+      font-size: 0.72rem;
+      color: rgba(255,255,255,0.55);
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 3px;
+    }
+    .info-value {
+      font-size: 0.88rem;
+      color: var(--white);
+      font-weight: 500;
+    }
 
-  /* ── Time slots ── */
-  .slots-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 8px;
-  }
-  .slot {
-    padding: 11px 6px;
-    text-align: center;
-    border: 1px solid var(--border);
-    border-radius: 2px;
-    font-size: 12px;
-    font-weight: 400;
-    letter-spacing: 0.06em;
-    cursor: pointer;
-    color: var(--ink);
-    background: var(--white);
-    transition: all .15s;
-  }
-  .slot:hover { border-color: var(--sky); color: var(--sky); background: var(--sky-light); }
-  .slot.sel { background: var(--ink); color: var(--white); border-color: var(--ink); }
-  .slot.taken { background: var(--off); color: var(--border); cursor: not-allowed; text-decoration: line-through; }
-  .no-date {
-    text-align: center;
-    padding: 24px;
-    font-size: 12px;
-    font-weight: 300;
-    color: var(--ink3);
-    letter-spacing: 0.06em;
-    background: var(--off);
-    border-radius: 2px;
-  }
+    /* Panel footer */
+    .panel-footer {
+      position: relative;
+      z-index: 1;
+      margin-top: 32px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255,255,255,0.12);
+    }
+    .panel-footer p {
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.5);
+      line-height: 1.5;
+    }
+    .panel-footer a {
+      color: rgba(255,255,255,0.75);
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
 
-  /* ── Sidebar ── */
-  .sidebar {}
-  .info-panel {
-    background: var(--ink);
-    color: var(--white);
-    padding: 28px;
-    border-radius: 2px;
-    margin-bottom: 20px;
-  }
-  .info-panel h3 {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 18px;
-    font-weight: 400;
-    color: var(--white);
-    margin-bottom: 20px;
-    letter-spacing: 0.03em;
-  }
-  .info-item {
-    display: flex;
-    gap: 12px;
-    align-items: flex-start;
-    margin-bottom: 14px;
-    font-size: 12px;
-    font-weight: 300;
-    color: rgba(255,255,255,0.55);
-    line-height: 1.6;
-    letter-spacing: 0.03em;
-  }
-  .info-item:last-child { margin-bottom: 0; }
-  .info-dot {
-    width: 4px;
-    height: 4px;
-    border-radius: 50%;
-    background: var(--sky);
-    flex-shrink: 0;
-    margin-top: 6px;
-  }
-  .sel-panel {
-    border: 1px solid var(--border);
-    border-radius: 2px;
-    padding: 20px;
-    margin-bottom: 20px;
-    background: var(--white);
-  }
-  .sel-label {
-    font-size: 9px;
-    font-weight: 500;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: var(--ink3);
-    margin-bottom: 14px;
-  }
-  .sel-row {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 12px;
-    color: var(--ink2);
-    padding: 8px 0;
-    border-bottom: 1px solid var(--border2);
-    letter-spacing: 0.02em;
-    font-weight: 300;
-  }
-  .sel-row:last-child { border-bottom: none; padding-bottom: 0; }
-  .sel-key { color: var(--sky); font-size: 14px; width: 18px; flex-shrink: 0; text-align: center; }
-  .sel-val { font-weight: 400; color: var(--ink); }
-  .sel-empty { color: var(--border); font-style: italic; }
+    /* ── RIGHT PANEL ───────────────────────────────────────────── */
+    .right-panel {
+      flex: 1;
+      padding: 40px 36px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
 
-  /* ── Submit ── */
-  .submit-btn {
-    width: 100%;
-    height: 48px;
-    background: var(--ink);
-    color: var(--white);
-    border: none;
-    border-radius: 2px;
-    font-family: 'Jost', sans-serif;
-    font-size: 11px;
-    font-weight: 500;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    cursor: pointer;
-    transition: all .2s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-  }
-  .submit-btn:hover { background: #333; }
-  .submit-btn:active { transform: scale(0.99); }
-  .submit-btn:disabled { background: var(--border); color: var(--white); cursor: not-allowed; transform: none; }
-  .submit-note {
-    font-size: 10px;
-    color: var(--ink3);
-    text-align: center;
-    margin-top: 10px;
-    letter-spacing: 0.04em;
-    line-height: 1.6;
-    font-weight: 300;
-  }
-  .spinner {
-    width: 14px;
-    height: 14px;
-    border: 1.5px solid rgba(255,255,255,0.3);
-    border-top-color: white;
-    border-radius: 50%;
-    animation: spin .7s linear infinite;
-    display: none;
-  }
-  @keyframes spin { to { transform: rotate(360deg); } }
+    /* Section title */
+    .section-label {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--gray-200);
+    }
 
-  /* ── Success ── */
-  .success-screen { display: none; padding: 48px 0; text-align: center; }
-  .success-mark {
-    width: 60px;
-    height: 60px;
-    border: 1px solid var(--sky);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto 24px;
-    font-size: 22px;
-    color: var(--sky);
-    animation: pop .4s cubic-bezier(.34,1.56,.64,1);
-  }
-  @keyframes pop { from { transform: scale(0); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-  .success-screen h2 {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 28px;
-    font-weight: 400;
-    margin-bottom: 10px;
-    letter-spacing: 0.02em;
-  }
-  .success-screen p {
-    font-size: 13px;
-    font-weight: 300;
-    color: var(--ink2);
-    line-height: 1.7;
-    max-width: 380px;
-    margin: 0 auto 28px;
-    letter-spacing: 0.03em;
-  }
-  .success-details {
-    display: inline-block;
-    text-align: left;
-    border: 1px solid var(--sky-mid);
-    background: var(--sky-light);
-    border-radius: 2px;
-    padding: 18px 24px;
-    font-size: 12px;
-    color: var(--ink2);
-    line-height: 2;
-    letter-spacing: 0.04em;
-    font-weight: 300;
-    min-width: 280px;
-  }
+    /* ── Form inputs ───────────────────────────────────────────── */
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 28px;
+    }
+    .form-grid .full { grid-column: 1 / -1; }
 
-  /* ── Footer ── */
-  .footer {
-    border-top: 1px solid var(--border2);
-    padding: 20px 48px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    font-size: 10px;
-    color: var(--ink3);
-    letter-spacing: 0.08em;
-  }
-  .footer-logo {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 13px;
-    font-weight: 500;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--ink2);
-    display: flex;
-    align-items: center;
-    gap: 0;
-  }
-  .footer-div { width: 1px; height: 14px; background: var(--sky); margin: 0 8px; }
-</style>
+    .field { display: flex; flex-direction: column; }
+    label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--gray-600);
+      margin-bottom: 5px;
+    }
+    label .req { color: var(--teal); margin-left: 2px; }
+
+    input[type="text"],
+    input[type="email"] {
+      padding: 10px 13px;
+      border: 1.5px solid var(--gray-300);
+      border-radius: var(--radius-sm);
+      font-size: 0.92rem;
+      font-family: inherit;
+      color: var(--gray-900);
+      background: var(--white);
+      transition: border-color 0.15s, box-shadow 0.15s;
+      outline: none;
+    }
+    input:focus {
+      border-color: var(--teal);
+      box-shadow: 0 0 0 3px rgba(13,115,119,0.12);
+    }
+    input::placeholder { color: var(--gray-400); }
+    input.invalid {
+      border-color: var(--error);
+      box-shadow: 0 0 0 3px rgba(197,48,48,0.08);
+    }
+
+    /* ── Alert ─────────────────────────────────────────────────── */
+    #alertArea { margin-bottom: 8px; }
+    .alert {
+      padding: 11px 14px;
+      border-radius: var(--radius-sm);
+      font-size: 0.85rem;
+      line-height: 1.45;
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+    .alert-icon { flex-shrink: 0; font-size: 1rem; margin-top: 1px; }
+    .alert-error { background: var(--error-bg); border: 1.5px solid var(--error-bd); color: var(--error); }
+    .alert-warn  { background: var(--warn-bg);  border: 1.5px solid var(--warn-bd);  color: var(--warn-text); }
+
+    /* ── Slot picker ───────────────────────────────────────────── */
+    .slots-section { flex: 1; }
+
+    /* Loading skeleton */
+    #loadingSkeleton { padding-top: 4px; }
+    .skeleton-row { display: flex; gap: 8px; margin-bottom: 16px; }
+    .skel {
+      border-radius: 8px;
+      background: linear-gradient(90deg, var(--gray-100) 25%, var(--gray-50) 50%, var(--gray-100) 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s ease-in-out infinite;
+    }
+    .skel-tab  { width: 66px; height: 76px; border-radius: 10px; }
+    .skel-time { height: 38px; flex: 0 0 90px; }
+    @keyframes shimmer { to { background-position: -200% 0; } }
+
+    /* Date tabs */
+    .date-tabs-scroll {
+      overflow-x: auto;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+      margin-bottom: 20px;
+      padding-bottom: 4px;
+    }
+    .date-tabs-scroll::-webkit-scrollbar { display: none; }
+    .date-tabs { display: flex; gap: 8px; min-width: max-content; }
+
+    .date-tab {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 10px 14px 8px;
+      border: 1.5px solid var(--gray-200);
+      border-radius: 10px;
+      background: var(--white);
+      min-width: 68px;
+      cursor: pointer;
+      transition: border-color 0.14s, background 0.14s, color 0.14s;
+      user-select: none;
+    }
+    .date-tab:hover {
+      border-color: var(--teal);
+      background: var(--teal-faint);
+    }
+    .date-tab.active {
+      border-color: var(--teal);
+      background: var(--teal);
+      color: var(--white);
+    }
+    .dt-dow   { font-size: 0.68rem; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; opacity: 0.6; }
+    .dt-num   { font-size: 1.3rem; font-weight: 700; line-height: 1.15; margin: 1px 0; }
+    .dt-mon   { font-size: 0.68rem; opacity: 0.6; }
+    .dt-badge {
+      margin-top: 5px;
+      font-size: 0.62rem;
+      font-weight: 700;
+      background: var(--gray-100);
+      color: var(--gray-500);
+      border-radius: 99px;
+      padding: 2px 6px;
+    }
+    .date-tab.active .dt-badge { background: rgba(255,255,255,0.2); color: rgba(255,255,255,0.85); }
+    .date-tab.active .dt-dow,
+    .date-tab.active .dt-mon  { opacity: 0.7; }
+
+    /* Time slot grid */
+    .time-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+    }
+    .time-btn {
+      padding: 9px 18px;
+      border: 1.5px solid var(--gray-200);
+      border-radius: var(--radius-sm);
+      background: var(--white);
+      font-size: 0.88rem;
+      font-weight: 500;
+      color: var(--gray-700);
+      transition: all 0.14s;
+      user-select: none;
+    }
+    .time-btn:hover {
+      border-color: var(--teal);
+      color: var(--teal);
+      background: var(--teal-faint);
+    }
+    .time-btn.selected {
+      border-color: var(--teal);
+      background: var(--teal);
+      color: var(--white);
+      box-shadow: 0 3px 10px rgba(13,115,119,0.28);
+    }
+    .no-slots {
+      padding: 28px 0;
+      text-align: center;
+      color: var(--gray-400);
+      font-size: 0.9rem;
+    }
+
+    /* ── Selected summary pill ─────────────────────────────────── */
+    #selectedBanner {
+      display: none;
+      margin: 18px 0 0;
+      padding: 11px 16px;
+      background: var(--success-bg);
+      border: 1.5px solid var(--success-bd);
+      border-radius: var(--radius-sm);
+      font-size: 0.87rem;
+      color: var(--success);
+      display: none;
+      align-items: center;
+      gap: 10px;
+    }
+    #selectedBanner .check-icon {
+      width: 22px; height: 22px;
+      background: var(--success);
+      border-radius: 50%;
+      color: white;
+      font-size: 0.75rem;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+
+    /* ── Submit button ─────────────────────────────────────────── */
+    .submit-wrap { margin-top: 20px; }
+    .submit-btn {
+      width: 100%;
+      padding: 14px 24px;
+      background: linear-gradient(135deg, var(--teal) 0%, var(--teal-light) 100%);
+      color: var(--white);
+      font-size: 0.97rem;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      border: none;
+      border-radius: var(--radius-sm);
+      transition: opacity 0.15s, transform 0.1s, box-shadow 0.15s;
+      box-shadow: 0 4px 14px rgba(13,115,119,0.35);
+    }
+    .submit-btn:hover:not(:disabled) {
+      opacity: 0.92;
+      box-shadow: 0 6px 20px rgba(13,115,119,0.4);
+    }
+    .submit-btn:active:not(:disabled) { transform: scale(0.99); }
+    .submit-btn:disabled {
+      background: var(--gray-200);
+      color: var(--gray-400);
+      box-shadow: none;
+      cursor: not-allowed;
+    }
+    .spinner {
+      display: inline-block;
+      width: 15px; height: 15px;
+      border: 2px solid rgba(255,255,255,0.35);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.65s linear infinite;
+      vertical-align: middle;
+      margin-right: 8px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── Fetch error ───────────────────────────────────────────── */
+    .fetch-error {
+      display: none;
+      text-align: center;
+      padding: 40px 0;
+    }
+    .fetch-error .err-icon {
+      font-size: 2.4rem;
+      margin-bottom: 12px;
+    }
+    .fetch-error h3 { font-size: 1.1rem; color: var(--gray-700); margin-bottom: 8px; }
+    .fetch-error p  { font-size: 0.88rem; color: var(--gray-500); margin-bottom: 18px; }
+    .retry-btn {
+      padding: 10px 26px;
+      background: var(--teal);
+      color: white;
+      font-size: 0.88rem;
+      font-weight: 600;
+      border: none;
+      border-radius: var(--radius-xs);
+    }
+    .retry-btn:hover { background: var(--teal-dark); }
+
+    /* ── Success card ──────────────────────────────────────────── */
+    #successCard {
+      display: none;
+      width: 100%;
+      max-width: 980px;
+      background: var(--white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .success-header {
+      background: linear-gradient(135deg, var(--teal-dark), var(--teal-light));
+      padding: 40px 32px 36px;
+      text-align: center;
+    }
+    .success-anim {
+      width: 68px; height: 68px;
+      background: rgba(255,255,255,0.15);
+      border: 2px solid rgba(255,255,255,0.4);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 16px;
+      font-size: 1.8rem;
+      animation: popIn 0.4s cubic-bezier(0.34,1.56,0.64,1) both;
+    }
+    @keyframes popIn {
+      from { transform: scale(0.4); opacity: 0; }
+      to   { transform: scale(1);   opacity: 1; }
+    }
+    .success-header h2 { font-size: 1.5rem; color: white; margin-bottom: 6px; font-weight: 700; }
+    .success-header p  { font-size: 0.9rem; color: rgba(255,255,255,0.75); line-height: 1.5; }
+    .success-header strong { color: white; }
+
+    .success-body { padding: 32px 36px; }
+    .success-title { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--teal); margin-bottom: 14px; }
+
+    .booking-summary {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    .summary-item {
+      background: var(--teal-faint);
+      border: 1px solid var(--teal-pale);
+      border-radius: var(--radius-sm);
+      padding: 14px 16px;
+    }
+    .summary-item .s-label {
+      font-size: 0.73rem;
+      font-weight: 600;
+      color: var(--teal);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 4px;
+    }
+    .summary-item .s-value {
+      font-size: 0.93rem;
+      font-weight: 600;
+      color: var(--gray-900);
+    }
+
+    .success-note {
+      background: var(--gray-50);
+      border-radius: var(--radius-sm);
+      padding: 14px 16px;
+      font-size: 0.86rem;
+      color: var(--gray-600);
+      line-height: 1.6;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+    .success-note .note-icon { font-size: 1.1rem; flex-shrink: 0; margin-top: 1px; }
+
+    /* ── Demo mode banner ──────────────────────────────────────── */
+    .demo-banner {
+      display: none;
+      align-items: flex-start;
+      gap: 9px;
+      background: #fffbea;
+      border: 1.5px solid #f6e05e;
+      border-radius: var(--radius-sm);
+      padding: 10px 13px;
+      margin-bottom: 14px;
+      font-size: 0.82rem;
+      color: #7b5e00;
+      line-height: 1.45;
+    }
+    .demo-banner.visible { display: flex; }
+    .demo-banner strong  { font-weight: 700; }
+
+    /* ── Page footer ───────────────────────────────────────────── */
+    .page-footer {
+      margin-top: 20px;
+      font-size: 0.78rem;
+      color: var(--gray-400);
+      text-align: center;
+    }
+
+    /* ── Responsive — tablet ───────────────────────────────────── */
+    @media (max-width: 780px) {
+      .booking-card { flex-direction: column; }
+      .left-panel {
+        width: 100%;
+        padding: 24px 24px 20px;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 0;
+      }
+      .left-panel::before { display: none; }
+      .left-panel::after  { display: none; }
+      .logo-area { margin-bottom: 0; flex: 1; }
+      .panel-heading { display: none; }
+      .panel-divider { display: none; }
+      .info-list { display: none; }
+      .panel-footer { display: none; }
+      .right-panel { padding: 24px 20px 28px; }
+      .booking-summary { grid-template-columns: 1fr; }
+    }
+
+    /* ── Responsive — mobile ───────────────────────────────────── */
+    @media (max-width: 480px) {
+      .page { padding: 16px 10px 48px; }
+      .form-grid { grid-template-columns: 1fr; }
+      .form-grid .full { grid-column: 1; }
+    }
+  </style>
 </head>
 <body>
 
+<div class="page">
+
+  <!-- ════════════════════════════════════════════════════════════
+       MAIN BOOKING CARD
+       ════════════════════════════════════════════════════════════ -->
+  <div class="booking-card" id="mainCard">
+
+    <!-- ── LEFT PANEL ── -->
+    <div class="left-panel">
+
+      <div class="logo-area">
+        <div class="logo-pill">
+          <img
+            src="logo.png"
+            alt="Gramans Group"
+            class="company-logo"
+            onerror="this.closest('.logo-pill').style.display='none'; document.getElementById('logoFallback').style.display='block';"
+          >
+        </div>
+        <span id="logoFallback" class="logo-text-fallback">Gramans Group</span>
+      </div>
+
+      <div class="panel-heading">
+        <h2>Interview Scheduling</h2>
+        <p>Book a time that works for you. We look forward to meeting you.</p>
+      </div>
+
+      <div class="panel-divider"></div>
+
+      <ul class="info-list">
+        <li class="info-item">
+          <div class="info-icon">&#128197;</div>
+          <div class="info-content">
+            <div class="info-label">Duration</div>
+            <div class="info-value">60 minutes</div>
+          </div>
+        </li>
+        <li class="info-item">
+          <div class="info-icon">&#128187;</div>
+          <div class="info-content">
+            <div class="info-label">Format</div>
+            <div class="info-value">Video Call</div>
+          </div>
+        </li>
+        <li class="info-item">
+          <div class="info-icon">&#127970;</div>
+          <div class="info-content">
+            <div class="info-label">Team</div>
+            <div class="info-value">Talent Acquisition</div>
+          </div>
+        </li>
+        <li class="info-item">
+          <div class="info-icon">&#128275;</div>
+          <div class="info-content">
+            <div class="info-label">Confidentiality</div>
+            <div class="info-value">Private &amp; Secure</div>
+          </div>
+        </li>
+      </ul>
+
+      <div class="panel-footer">
+        <p>Questions? Email us at<br><a href="mailto:hr@gramansgroup.com">hr@gramansgroup.com</a></p>
+      </div>
+
+    </div><!-- /.left-panel -->
+
+    <!-- ── RIGHT PANEL ── -->
+    <div class="right-panel">
+
+      <!-- Your Details -->
+      <div class="section-label">Your Details</div>
+      <div class="form-grid">
+        <div class="field">
+          <label for="candidateName">Full Name <span class="req">*</span></label>
+          <input type="text" id="candidateName" placeholder="Jane Doe" autocomplete="name">
+        </div>
+        <div class="field">
+          <label for="candidateEmail">Email Address <span class="req">*</span></label>
+          <input type="email" id="candidateEmail" placeholder="jane@email.com" autocomplete="email">
+        </div>
+        <div class="field full">
+          <label for="position">Position Applying For <span class="req">*</span></label>
+          <input type="text" id="position" placeholder="e.g. Software Engineer, Marketing Manager">
+        </div>
+      </div>
+
+      <!-- Alerts -->
+      <div id="alertArea"></div>
+
+      <!-- Select a Time -->
+      <div class="slots-section">
+        <div class="section-label">Select a Time</div>
+
+        <!-- Demo mode notice (hidden in live mode) -->
+        <div class="demo-banner" id="demoBanner">
+          <span>&#9888;</span>
+          <span><strong>Demo mode</strong> — sample slots shown. Paste your n8n webhook URLs into the CONFIG block at the top of the &lt;script&gt; to go live.</span>
+        </div>
+
+        <!-- Loading skeleton -->
+        <div id="loadingSkeleton">
+          <div class="skeleton-row">
+            <div class="skel skel-tab"></div><div class="skel skel-tab"></div>
+            <div class="skel skel-tab"></div><div class="skel skel-tab"></div>
+            <div class="skel skel-tab"></div><div class="skel skel-tab"></div>
+          </div>
+          <div class="skeleton-row">
+            <div class="skel skel-time"></div><div class="skel skel-time"></div>
+            <div class="skel skel-time"></div><div class="skel skel-time"></div>
+            <div class="skel skel-time"></div>
+          </div>
+        </div>
+
+        <!-- Slot picker -->
+        <div id="slotPicker" style="display:none;">
+          <div class="date-tabs-scroll">
+            <div class="date-tabs" id="dateTabs"></div>
+          </div>
+          <div class="time-grid" id="timeSlots"></div>
+        </div>
+
+        <!-- Fetch error -->
+        <div class="fetch-error" id="fetchError">
+          <div class="err-icon">&#9888;&#65039;</div>
+          <h3>Unable to load available times</h3>
+          <p>There was a problem connecting to the scheduling service.<br>Please try again or contact HR directly.</p>
+          <button class="retry-btn" onclick="loadSlots()">Try Again</button>
+        </div>
+
+      </div><!-- /.slots-section -->
+
+      <!-- Selected slot banner -->
+      <div id="selectedBanner" style="display:none;">
+        <div class="check-icon">&#10003;</div>
+        <span id="selectedBannerText"></span>
+      </div>
+
+      <!-- Submit -->
+      <div class="submit-wrap">
+        <button class="submit-btn" id="submitBtn" disabled onclick="submitBooking()">
+          Confirm Interview Booking
+        </button>
+      </div>
+
+    </div><!-- /.right-panel -->
+  </div><!-- /.booking-card -->
+
+
+  <!-- ════════════════════════════════════════════════════════════
+       SUCCESS CARD (shown after booking)
+       ════════════════════════════════════════════════════════════ -->
+  <div id="successCard">
+
+    <div class="success-header">
+      <div class="success-anim">&#10003;</div>
+      <h2>You're All Set!</h2>
+      <p>A confirmation email has been sent to <strong id="successEmail"></strong>.<br>
+         Please accept the calendar invite to confirm your spot.</p>
+    </div>
+
+    <div class="success-body">
+      <div class="success-title">Booking Summary</div>
+      <div class="booking-summary" id="bookingSummary"></div>
+      <div class="success-note">
+        <span class="note-icon">&#8505;&#65039;</span>
+        <span>Need to reschedule or cancel? Contact HR at
+          <a href="mailto:hr@gramansgroup.com" style="color: var(--teal); font-weight:600;">hr@gramansgroup.com</a>
+          with your name and the calendar event reference.
+        </span>
+      </div>
+    </div>
+
+  </div><!-- /#successCard -->
+
+  <div class="page-footer">
+    &copy; <span id="footerYear"></span> Gramans Group &mdash; Confidential
+  </div>
+
+</div><!-- /.page -->
+
 <script>
-const CONFIG = {
-  n8nWebhookUrl: 'https://n8n.srv1631809.hstgr.cloud/webhook/hr-interview-request',
-  companyName: 'Gramans Group',
-  interviewDuration: 45,
-  availableDays: [1,2,3,4,5],
-  availableTimes: ['09:00','09:45','10:30','11:15','13:00','13:45','14:30','15:15','16:00'],
-  takenSlots: ['2026-05-21_09:00','2026-05-21_10:30','2026-05-22_13:00'],
-  minDaysAhead: 1,
-  maxDaysAhead: 21,
-};
-</script>
+  // ══════════════════════════════════════════════════════════════════
+  //  CONFIGURATION — update these values before going live
+  // ══════════════════════════════════════════════════════════════════
+  const CONFIG = {
+    // GET webhook URL from workflow-get-available-slots (n8n)
+    slotsWebhookUrl: 'https://n8n.srv1631809.hstgr.cloud/webhook/get-available-slots',
 
-<header class="header">
-  <div class="logo">
-    GRAMANS
-    <div class="logo-divider"></div>
-    GROUP
-  </div>
-  <div class="header-tag">Careers &amp; Recruitment</div>
-</header>
+    // POST webhook URL from workflow-schedule-interview (n8n)
+    bookingWebhookUrl: 'YOUR_N8N_SCHEDULE_INTERVIEW_WEBHOOK_URL',
 
-<div class="dev-note">
-  <span>⚙</span>
-  <span><strong>Developer:</strong> Edit the <code>CONFIG</code> block at top of file — set your n8n webhook URL, available times, and taken slots before deployment.</span>
-</div>
+    // Default interviewer email to check availability against.
+    // Can be overridden via URL param: ?interviewer=recruiter@gramansgroup.com
+    defaultInterviewerEmail: 'careers@gramansgroup.com',
 
-<div class="banner">
-  <div class="banner-eyebrow">Interview Scheduling</div>
-  <h1>Schedule your<br><em>interview appointment</em></h1>
-  <p>Select a convenient date and time for your interview. A calendar confirmation will be sent to your email and phone once you complete your booking.</p>
-</div>
-
-<div class="step-bar" id="step-bar">
-  <div class="step-tab active" id="stab1" onclick="goStep(1)">
-    <div class="step-num" id="snum1">1</div>
-    Your details
-  </div>
-  <div class="step-sep">—</div>
-  <div class="step-tab" id="stab2" onclick="goStep(2)">
-    <div class="step-num" id="snum2">2</div>
-    Select date
-  </div>
-  <div class="step-sep">—</div>
-  <div class="step-tab" id="stab3" onclick="goStep(3)">
-    <div class="step-num" id="snum3">3</div>
-    Select time
-  </div>
-  <div class="step-sep">—</div>
-  <div class="step-tab" id="stab4" onclick="goStep(4)">
-    <div class="step-num" id="snum4">4</div>
-    Confirm
-  </div>
-</div>
-
-<div class="layout">
-  <div>
-    <div id="main-form">
-
-      <!-- Step 1: Details -->
-      <div class="section">
-        <div class="section-header">
-          <div class="section-num">01</div>
-          <div class="section-title">Personal information</div>
-        </div>
-        <div class="form-grid">
-          <div class="field" id="f-name">
-            <label for="inp-name">Full name</label>
-            <input type="text" id="inp-name" placeholder="Juan dela Cruz" oninput="sync()">
-            <div class="err-msg">Please enter your full name</div>
-          </div>
-          <div class="field" id="f-phone">
-            <label for="inp-phone">Mobile number</label>
-            <input type="tel" id="inp-phone" placeholder="+63 9XX XXX XXXX" oninput="sync()">
-            <div class="err-msg">Enter a valid mobile number</div>
-          </div>
-          <div class="field full" id="f-email">
-            <label for="inp-email">Email address</label>
-            <input type="email" id="inp-email" placeholder="juan@email.com" oninput="sync()">
-            <div class="err-msg">Enter a valid email address</div>
-          </div>
-          <div class="field full" id="f-position">
-            <label for="inp-position">Position applied for</label>
-            <input type="text" id="inp-position" placeholder="e.g. Software Engineer" oninput="sync()">
-            <div class="err-msg">Please specify the position</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Step 2: Calendar -->
-      <div class="section">
-        <div class="section-header">
-          <div class="section-num">02</div>
-          <div class="section-title">Preferred date</div>
-        </div>
-        <div class="cal-nav">
-          <button class="cal-btn" onclick="prevMonth()" aria-label="Previous">&#8592;</button>
-          <div class="cal-month-label" id="cal-label"></div>
-          <button class="cal-btn" onclick="nextMonth()" aria-label="Next">&#8594;</button>
-        </div>
-        <div class="cal-dow-row">
-          <div class="cal-dow">Su</div><div class="cal-dow">Mo</div><div class="cal-dow">Tu</div>
-          <div class="cal-dow">We</div><div class="cal-dow">Th</div><div class="cal-dow">Fr</div><div class="cal-dow">Sa</div>
-        </div>
-        <div class="cal-grid" id="cal-grid"></div>
-        <div class="cal-legend">
-          <div class="cal-leg"><div class="cal-leg-dot" style="background:var(--white);border:1px solid var(--border)"></div> Available</div>
-          <div class="cal-leg"><div class="cal-leg-dot" style="background:var(--ink)"></div> Selected</div>
-          <div class="cal-leg"><div class="cal-leg-dot" style="background:var(--off);border:1px solid var(--border2)"></div> Unavailable</div>
-        </div>
-      </div>
-
-      <!-- Step 3: Time -->
-      <div class="section">
-        <div class="section-header">
-          <div class="section-num">03</div>
-          <div class="section-title">Preferred time</div>
-        </div>
-        <div id="slots-wrap">
-          <div class="no-date">Please select a date first</div>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- Success -->
-    <div class="success-screen" id="success-screen">
-      <div class="success-mark">✓</div>
-      <h2>Booking confirmed</h2>
-      <p>Your interview has been scheduled. Please check your email and SMS for the confirmation and calendar invite.</p>
-      <div class="success-details" id="success-details"></div>
-    </div>
-  </div>
-
-  <!-- Sidebar -->
-  <div class="sidebar" id="sidebar">
-    <div class="info-panel">
-      <h3>Interview overview</h3>
-      <div class="info-item"><div class="info-dot"></div><span id="co-name"></span></div>
-      <div class="info-item"><div class="info-dot"></div><span id="dur-label"></span> minutes · Video interview</div>
-      <div class="info-item"><div class="info-dot"></div>Available Monday to Friday, 9 AM – 5 PM</div>
-      <div class="info-item"><div class="info-dot"></div>Google Calendar invite sent upon booking confirmation</div>
-    </div>
-    <div class="sel-panel" id="sel-panel">
-      <div class="sel-label">Your selection</div>
-      <div class="sel-row"><span class="sel-key">📅</span><span id="sel-date" class="sel-empty">No date selected</span></div>
-      <div class="sel-row"><span class="sel-key">🕐</span><span id="sel-time" class="sel-empty">No time selected</span></div>
-      <div class="sel-row"><span class="sel-key">👤</span><span id="sel-name" class="sel-empty">—</span></div>
-    </div>
-    <button class="submit-btn" id="submit-btn" onclick="submitBooking()" disabled>
-      <div class="spinner" id="spinner"></div>
-      <span id="btn-label">COMPLETE ALL STEPS TO BOOK</span>
-    </button>
-    <div class="submit-note">
-      By submitting, you agree to receive SMS and email confirmation from Gramans Group HR.
-    </div>
-  </div>
-</div>
-
-<footer class="footer">
-  <div class="footer-logo">
-    GRAMANS <div class="footer-div"></div> GROUP
-  </div>
-  <div>© 2026 Gramans Group · All rights reserved</div>
-</footer>
-
-<script>
-let curY, curM, selDate = null, selTime = null;
-document.getElementById('co-name').textContent = CONFIG.companyName;
-document.getElementById('dur-label').textContent = CONFIG.interviewDuration;
-const now = new Date(); curY = now.getFullYear(); curM = now.getMonth();
-renderCal(); sync();
-
-function renderCal() {
-  const label = new Date(curY, curM, 1).toLocaleString('en-PH', { month: 'long', year: 'numeric' });
-  document.getElementById('cal-label').textContent = label;
-  const grid = document.getElementById('cal-grid');
-  grid.innerHTML = '';
-  const first = new Date(curY, curM, 1).getDay();
-  const days = new Date(curY, curM + 1, 0).getDate();
-  const today = new Date(); today.setHours(0,0,0,0);
-  const minD = new Date(today); minD.setDate(today.getDate() + CONFIG.minDaysAhead);
-  const maxD = new Date(today); maxD.setDate(today.getDate() + CONFIG.maxDaysAhead);
-  for (let i = 0; i < first; i++) {
-    const el = document.createElement('div'); el.className = 'cal-day'; grid.appendChild(el);
-  }
-  for (let d = 1; d <= days; d++) {
-    const date = new Date(curY, curM, d);
-    const ds = fmt(curY, curM, d);
-    const isToday = date.toDateString() === today.toDateString();
-    const avail = date >= minD && date <= maxD && CONFIG.availableDays.includes(date.getDay());
-    const el = document.createElement('div');
-    el.className = 'cal-day' + (avail ? ' avail' : '') + (isToday ? ' today' : '') + (ds === selDate ? ' sel' : '');
-    el.textContent = d;
-    if (avail) el.onclick = () => pickDate(ds, el);
-    grid.appendChild(el);
-  }
-}
-function fmt(y, m, d) { return `${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`; }
-function friendly(s) { const [y,m,d]=s.split('-').map(Number); return new Date(y,m-1,d).toLocaleDateString('en-PH',{weekday:'long',year:'numeric',month:'long',day:'numeric'}); }
-function fmtTime(t) { const [h,m]=t.split(':').map(Number); return `${h%12||12}:${String(m).padStart(2,'0')} ${h>=12?'PM':'AM'}`; }
-function prevMonth() { curM--; if(curM<0){curM=11;curY--;} renderCal(); }
-function nextMonth() { curM++; if(curM>11){curM=0;curY++;} renderCal(); }
-
-function pickDate(ds, el) {
-  selDate = ds; selTime = null;
-  document.querySelectorAll('.cal-day').forEach(x => x.classList.remove('sel'));
-  el.classList.add('sel');
-  renderSlots(); sync();
-}
-function renderSlots() {
-  const w = document.getElementById('slots-wrap');
-  if (!selDate) { w.innerHTML = '<div class="no-date">Please select a date first</div>'; return; }
-  w.innerHTML = '<div class="slots-grid" id="slots-grid"></div>';
-  const g = document.getElementById('slots-grid');
-  CONFIG.availableTimes.forEach(t => {
-    const key = `${selDate}_${t}`, taken = CONFIG.takenSlots.includes(key);
-    const el = document.createElement('div');
-    el.className = 'slot' + (taken ? ' taken' : '') + (selTime === t ? ' sel' : '');
-    el.textContent = fmtTime(t);
-    if (!taken) el.onclick = () => pickTime(t, el);
-    g.appendChild(el);
-  });
-}
-function pickTime(t, el) {
-  selTime = t;
-  document.querySelectorAll('.slot').forEach(x => x.classList.remove('sel'));
-  el.classList.add('sel');
-  sync();
-}
-
-function sync() {
-  const name = document.getElementById('inp-name').value.trim();
-  const phone = document.getElementById('inp-phone').value.trim();
-  const email = document.getElementById('inp-email').value.trim();
-  const pos = document.getElementById('inp-position').value.trim();
-  const infoOk = name && phone && email && pos;
-  const all = infoOk && selDate && selTime;
-
-  // step tabs
-  function setTab(n, state) {
-    const tab = document.getElementById('stab' + n);
-    const num = document.getElementById('snum' + n);
-    tab.className = 'step-tab' + (state ? ' ' + state : '');
-    num.textContent = state === 'done' ? '✓' : n;
-  }
-  setTab(1, infoOk ? 'done' : 'active');
-  setTab(2, selDate ? 'done' : infoOk ? 'active' : '');
-  setTab(3, selTime ? 'done' : selDate ? 'active' : '');
-  setTab(4, all ? 'active' : '');
-
-  // sidebar
-  document.getElementById('sel-date').innerHTML = selDate
-    ? `<span class="sel-val">${friendly(selDate)}</span>`
-    : '<span class="sel-empty">No date selected</span>';
-  document.getElementById('sel-time').innerHTML = selTime
-    ? `<span class="sel-val">${fmtTime(selTime)}</span>`
-    : '<span class="sel-empty">No time selected</span>';
-  document.getElementById('sel-name').innerHTML = name
-    ? `<span class="sel-val">${name}</span>`
-    : '<span class="sel-empty">—</span>';
-
-  // button
-  const btn = document.getElementById('submit-btn');
-  const lbl = document.getElementById('btn-label');
-  btn.disabled = !all;
-  lbl.textContent = all ? 'CONFIRM BOOKING' : !infoOk ? 'FILL IN YOUR DETAILS FIRST' : !selDate ? 'SELECT A DATE' : 'SELECT A TIME';
-}
-function goStep(n) { /* visual only, all sections always visible */ }
-
-async function submitBooking() {
-  const name = document.getElementById('inp-name').value.trim();
-  const phone = document.getElementById('inp-phone').value.trim();
-  const email = document.getElementById('inp-email').value.trim();
-  const position = document.getElementById('inp-position').value.trim();
-  let err = false;
-  if (!name) { document.getElementById('f-name').classList.add('has-error'); err = true; }
-  else document.getElementById('f-name').classList.remove('has-error');
-  if (!phone) { document.getElementById('f-phone').classList.add('has-error'); err = true; }
-  else document.getElementById('f-phone').classList.remove('has-error');
-  if (!email || !email.includes('@')) { document.getElementById('f-email').classList.add('has-error'); err = true; }
-  else document.getElementById('f-email').classList.remove('has-error');
-  if (!position) { document.getElementById('f-position').classList.add('has-error'); err = true; }
-  else document.getElementById('f-position').classList.remove('has-error');
-  if (err || !selDate || !selTime) return;
-
-  const btn = document.getElementById('submit-btn');
-  const lbl = document.getElementById('btn-label');
-  const sp = document.getElementById('spinner');
-  btn.disabled = true; sp.style.display = 'block'; lbl.textContent = 'PROCESSING…';
-
-  const payload = {
-    name, phone, email, position,
-    interview_date: selDate,
-    interview_time: selTime,
-    interview_datetime: `${selDate}T${selTime}:00`,
-    duration_minutes: CONFIG.interviewDuration,
-    friendly_date: friendly(selDate),
-    friendly_time: fmtTime(selTime),
-    company: CONFIG.companyName,
+    // How many business days ahead to show available slots
+    daysAhead: 14
   };
-  try {
-    await fetch(CONFIG.n8nWebhookUrl, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
+  // ══════════════════════════════════════════════════════════════════
+
+  // Set footer year
+  document.getElementById('footerYear').textContent = new Date().getFullYear();
+
+  let slotsData    = [];
+  let selectedSlot = null;
+
+  const urlParams        = new URLSearchParams(window.location.search);
+  const interviewerEmail = urlParams.get('interviewer') || CONFIG.defaultInterviewerEmail;
+
+  // ── Boot ──────────────────────────────────────────────────────────
+  document.addEventListener('DOMContentLoaded', loadSlots);
+
+  // ── Detect demo mode (webhook URL not yet configured) ────────────
+  const IS_DEMO = CONFIG.slotsWebhookUrl.startsWith('YOUR_');
+
+  // ── Load slots — live from n8n or demo mock ───────────────────────
+  async function loadSlots() {
+    show('loadingSkeleton');
+    hide('slotPicker');
+    hide('fetchError');
+    clearAlert();
+    selectedSlot = null;
+    hide('selectedBanner');
+
+    // Show / hide demo banner
+    const banner = document.getElementById('demoBanner');
+    IS_DEMO ? banner.classList.add('visible') : banner.classList.remove('visible');
+
+    try {
+      let data;
+
+      if (IS_DEMO) {
+        // Simulate a short loading delay so the skeleton is visible
+        await new Promise(r => setTimeout(r, 800));
+        data = generateMockSlots();
+      } else {
+        const url = `${CONFIG.slotsWebhookUrl}` +
+                    `?interviewerEmail=${encodeURIComponent(interviewerEmail)}` +
+                    `&daysAhead=${CONFIG.daysAhead}`;
+        const res = await fetch(url);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        data = await res.json();
+      }
+
+      slotsData = data.dates || [];
+      hide('loadingSkeleton');
+
+      if (slotsData.length === 0) {
+        show('slotPicker');
+        document.getElementById('timeSlots').innerHTML =
+          `<p class="no-slots">No available slots in the next ${CONFIG.daysAhead} days.<br>Please contact HR directly.</p>`;
+        return;
+      }
+
+      buildDateTabs();
+      show('slotPicker');
+      selectDate(0);
+
+    } catch (err) {
+      hide('loadingSkeleton');
+      show('fetchError');
+      console.error('Slot load error:', err);
+    }
+  }
+
+  // ── Generate realistic demo slots (used when webhook not configured) ─
+  function generateMockSlots() {
+    const DAYS   = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+    const DSHORT = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+    const MONTHS = ['January','February','March','April','May','June',
+                    'July','August','September','October','November','December'];
+    const MSHORT = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+    // Vary which hours are "available" each day to look realistic
+    const HOUR_PATTERNS = [
+      [9, 10, 14, 15, 16],
+      [9, 11, 13, 14],
+      [10, 11, 15, 16],
+      [9, 10, 11, 14, 15],
+      [10, 13, 16],
+      [9, 14, 15, 16],
+      [11, 13, 14]
+    ];
+
+    const dates = [];
+    const now   = new Date();
+    let   dayOffset = 1, businessDays = 0;
+
+    while (businessDays < 8) {
+      const d = new Date(now);
+      d.setUTCDate(d.getUTCDate() + dayOffset++);
+      d.setUTCHours(0, 0, 0, 0);
+
+      const dow = d.getUTCDay();
+      if (dow === 0 || dow === 6) continue; // skip weekends
+
+      const hours = HOUR_PATTERNS[businessDays % HOUR_PATTERNS.length];
+      const slots = hours.map(hour => {
+        const start = new Date(d); start.setUTCHours(hour, 0, 0, 0);
+        const end   = new Date(d); end.setUTCHours(hour + 1, 0, 0, 0);
+        const ampm  = hour >= 12 ? 'PM' : 'AM';
+        const disp  = hour % 12 || 12;
+        return {
+          time:      `${String(hour).padStart(2,'0')}:00`,
+          timeLabel: `${disp}:00 ${ampm}`,
+          startISO:  start.toISOString(),
+          endISO:    end.toISOString()
+        };
+      });
+
+      dates.push({
+        date:       d.toISOString().split('T')[0],
+        dayName:    DAYS[dow],   dayShort:   DSHORT[dow],
+        monthName:  MONTHS[d.getUTCMonth()], monthShort: MSHORT[d.getUTCMonth()],
+        dayNumber:  d.getUTCDate(),          year:       d.getUTCFullYear(),
+        slots
+      });
+      businessDays++;
+    }
+    return { success: true, dates, totalAvailable: dates.reduce((s,d) => s + d.slots.length, 0) };
+  }
+
+  // ── Build date tab row ────────────────────────────────────────────
+  function buildDateTabs() {
+    const wrap = document.getElementById('dateTabs');
+    wrap.innerHTML = '';
+    slotsData.forEach((d, i) => {
+      const btn = document.createElement('button');
+      btn.className   = 'date-tab';
+      btn.dataset.idx = i;
+      btn.innerHTML   = `
+        <span class="dt-dow">${d.dayShort}</span>
+        <span class="dt-num">${d.dayNumber}</span>
+        <span class="dt-mon">${d.monthShort}</span>
+        <span class="dt-badge">${d.slots.length}</span>
+      `;
+      btn.addEventListener('click', () => selectDate(i));
+      wrap.appendChild(btn);
     });
-  } catch(e) {}
+  }
 
-  sp.style.display = 'none';
-  document.getElementById('main-form').style.display = 'none';
-  document.getElementById('step-bar').style.display = 'none';
-  document.getElementById('sel-panel').style.display = 'none';
-  btn.style.display = 'none';
-  document.querySelector('.submit-note').style.display = 'none';
+  // ── Show time slots for a given date index ────────────────────────
+  function selectDate(idx) {
+    document.querySelectorAll('.date-tab').forEach((t, i) =>
+      t.classList.toggle('active', i === idx)
+    );
 
-  document.getElementById('success-screen').style.display = 'block';
-  document.getElementById('success-details').innerHTML =
-    `📅&nbsp; ${friendly(selDate)}<br>🕐&nbsp; ${fmtTime(selTime)}<br>👤&nbsp; ${name}<br>💼&nbsp; ${position}<br>✉&nbsp; Confirmation sent to ${email}`;
-}
+    const d    = slotsData[idx];
+    const grid = document.getElementById('timeSlots');
+    grid.innerHTML = '';
 
-['inp-name','inp-phone','inp-email','inp-position'].forEach(id => {
-  document.getElementById(id).addEventListener('input', sync);
-});
+    d.slots.forEach(slot => {
+      const btn = document.createElement('button');
+      btn.className   = 'time-btn';
+      btn.textContent = slot.timeLabel;
+      if (selectedSlot && selectedSlot.date === d.date && selectedSlot.time === slot.time) {
+        btn.classList.add('selected');
+      }
+      btn.addEventListener('click', () => pickSlot(d, slot, btn));
+      grid.appendChild(btn);
+    });
+  }
+
+  // ── Select a time slot ────────────────────────────────────────────
+  function pickSlot(dateData, slot, btnEl) {
+    document.querySelectorAll('.time-btn').forEach(b => b.classList.remove('selected'));
+    btnEl.classList.add('selected');
+
+    selectedSlot = {
+      date:      dateData.date,
+      time:      slot.time,
+      startISO:  slot.startISO,
+      endISO:    slot.endISO,
+      dayName:   dateData.dayName,
+      monthName: dateData.monthName,
+      dayNumber: dateData.dayNumber,
+      year:      dateData.year,
+      timeLabel: slot.timeLabel
+    };
+
+    const banner = document.getElementById('selectedBanner');
+    banner.style.display = 'flex';
+    document.getElementById('selectedBannerText').innerHTML =
+      `<strong>${selectedSlot.dayName}, ${selectedSlot.monthName} ${selectedSlot.dayNumber}</strong> at <strong>${selectedSlot.timeLabel}</strong> — selected`;
+
+    updateSubmit();
+  }
+
+  // ── Validate & enable submit ──────────────────────────────────────
+  function updateSubmit() {
+    const name  = document.getElementById('candidateName').value.trim();
+    const email = document.getElementById('candidateEmail').value.trim();
+    const pos   = document.getElementById('position').value.trim();
+    const valid = name && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) && pos && !!selectedSlot;
+    document.getElementById('submitBtn').disabled = !valid;
+  }
+
+  ['candidateName', 'candidateEmail', 'position'].forEach(id => {
+    document.getElementById(id).addEventListener('input', updateSubmit);
+  });
+
+  // ── Submit booking ────────────────────────────────────────────────
+  async function submitBooking() {
+    clearAlert();
+
+    const candidateName  = document.getElementById('candidateName').value.trim();
+    const candidateEmail = document.getElementById('candidateEmail').value.trim();
+    const position       = document.getElementById('position').value.trim();
+
+    if (!selectedSlot) { showAlert('Please select an interview time.', 'warn'); return; }
+
+    const btn     = document.getElementById('submitBtn');
+    btn.disabled  = true;
+    btn.innerHTML = '<span class="spinner"></span>Confirming…';
+
+    const payload = {
+      candidateName,
+      candidateEmail,
+      position,
+      interviewDate:    selectedSlot.date,
+      interviewTime:    selectedSlot.time,
+      interviewerEmail: interviewerEmail
+    };
+
+    try {
+      if (IS_DEMO) {
+        // Demo mode: simulate network delay then show success screen
+        await new Promise(r => setTimeout(r, 1000));
+      } else {
+        const res  = await fetch(CONFIG.bookingWebhookUrl, {
+          method:  'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body:    JSON.stringify(payload)
+        });
+        const data = await res.json();
+
+        if (res.status === 409 || data.error === 'slot_unavailable') {
+          showAlert('That slot was just taken. Please choose a different time.', 'error');
+          selectedSlot = null;
+          hide('selectedBanner');
+          btn.disabled  = false;
+          btn.innerHTML = 'Confirm Interview Booking';
+          await loadSlots();
+          return;
+        }
+        if (!res.ok || !data.success) throw new Error(data.message || `HTTP ${res.status}`);
+      }
+
+      // ── Show success ──
+      hide('mainCard');
+      const sc = document.getElementById('successCard');
+      sc.style.display = 'block';
+
+      document.getElementById('successEmail').textContent = candidateEmail;
+      document.getElementById('bookingSummary').innerHTML = `
+        <div class="summary-item">
+          <div class="s-label">Candidate</div>
+          <div class="s-value">${esc(candidateName)}</div>
+        </div>
+        <div class="summary-item">
+          <div class="s-label">Position</div>
+          <div class="s-value">${esc(position)}</div>
+        </div>
+        <div class="summary-item">
+          <div class="s-label">Date</div>
+          <div class="s-value">${selectedSlot.dayName}, ${selectedSlot.monthName} ${selectedSlot.dayNumber}, ${selectedSlot.year}</div>
+        </div>
+        <div class="summary-item">
+          <div class="s-label">Time</div>
+          <div class="s-value">${selectedSlot.timeLabel} (1 hour)</div>
+        </div>
+      `;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    } catch (err) {
+      console.error('Booking error:', err);
+      showAlert('Something went wrong. Please try again or contact HR directly.', 'error');
+      btn.disabled  = false;
+      btn.innerHTML = 'Confirm Interview Booking';
+    }
+  }
+
+  // ── Helpers ───────────────────────────────────────────────────────
+  function show(id) { document.getElementById(id).style.display = 'block'; }
+  function hide(id) { document.getElementById(id).style.display = 'none';  }
+  function esc(s)   { return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+  function showAlert(msg, type) {
+    const icon = type === 'error' ? '&#10006;' : '&#9888;';
+    document.getElementById('alertArea').innerHTML =
+      `<div class="alert alert-${type}"><span class="alert-icon">${icon}</span>${msg}</div>`;
+  }
+  function clearAlert() { document.getElementById('alertArea').innerHTML = ''; }
 </script>
 </body>
 </html>
