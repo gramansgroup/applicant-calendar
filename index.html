@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Schedule Your Interview — Gramans Group</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { -webkit-text-size-adjust: 100%; }
+
+    body {
+      font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+      background: #e8eef6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 32px 16px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 1100px;
+      background: #ffffff;
+      border-radius: 16px;
+      box-shadow: 0 12px 48px rgba(30,60,120,0.14), 0 2px 8px rgba(0,0,0,0.06);
+      overflow: hidden;
+      display: flex;
+      min-height: 680px;
+    }
+
+    /* LEFT PANEL */
+    .left {
+      width: 300px;
+      flex-shrink: 0;
+      background: linear-gradient(175deg, #1a3a7a 0%, #0f2a62 45%, #0a1f50 100%);
+      padding: 32px 28px 28px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .left::before {
+      content: '';
+      position: absolute;
+      width: 220px; height: 220px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.04);
+      bottom: -60px; left: -60px;
+    }
+    .left::after {
+      content: '';
+      position: absolute;
+      width: 140px; height: 140px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.04);
+      top: -30px; right: -50px;
+    }
+
+    .logo-pill {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #ffffff;
+      border-radius: 10px;
+      padding: 10px 18px;
+      margin-bottom: 24px;
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    }
+
+    .logo-pill img {
+      height: 38px;
+      width: auto;
+      max-width: 210px;
+      object-fit: contain;
+      display: block;
+    }
+
+    .left-heading {
+      position: relative;
+      z-index: 1;
+      margin-bottom: 10px;
+      text-align: center;
+      width: 100%;
+    }
+
+    .left-heading h2 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #ffffff;
+      line-height: 1.25;
+      margin-bottom: 7px;
+    }
+
+    .left-heading p {
+      font-size: 0.8rem;
+      color: rgba(255,255,255,0.55);
+      line-height: 1.55;
+    }
+
+    .left-divider {
+      height: 1px;
+      background: rgba(255,255,255,0.14);
+      margin: 18px 0;
+      position: relative;
+      z-index: 1;
+      width: 100%;
+    }
+
+    .info-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      position: relative;
+      z-index: 1;
+      width: 100%;
+    }
+
+    .info-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 11px;
+    }
+
+    .info-icon {
+      width: 32px;
+      height: 32px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.88rem;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .info-label {
+      font-size: 0.65rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      color: rgba(255,255,255,0.44);
+      margin-bottom: 2px;
+    }
+
+    .info-value {
+      font-size: 0.83rem;
+      font-weight: 500;
+      color: #ffffff;
+    }
+
+    .left-footer {
+      position: relative;
+      z-index: 1;
+      margin-top: auto;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255,255,255,0.12);
+      width: 100%;
+      text-align: center;
+    }
+
+    .left-footer p {
+      font-size: 0.73rem;
+      color: rgba(255,255,255,0.44);
+      line-height: 1.55;
+    }
+
+    .left-footer a {
+      color: rgba(255,255,255,0.72);
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+
+    /* RIGHT PANEL */
+    .right {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* FORM SECTION */
+    .form-section {
+      flex: 1;
+      padding: 36px 40px;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+    }
+
+    .form-section h3 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #0f2a62;
+      margin-bottom: 4px;
+    }
+
+    .form-section .form-subtitle {
+      font-size: 0.82rem;
+      color: #718096;
+      margin-bottom: 28px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      margin-bottom: 18px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-group.full {
+      grid-column: 1 / -1;
+    }
+
+    .form-group label {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: #2d3748;
+      letter-spacing: 0.02em;
+    }
+
+    .form-group label .required {
+      color: #e53e3e;
+      margin-left: 2px;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      padding: 10px 14px;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-family: 'Inter', sans-serif;
+      color: #2d3748;
+      background: #f8fafc;
+      transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+      outline: none;
+      width: 100%;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: #0f2a62;
+      background: #ffffff;
+      box-shadow: 0 0 0 3px rgba(15,42,98,0.1);
+    }
+
+    .form-group input.error,
+    .form-group select.error,
+    .form-group textarea.error {
+      border-color: #e53e3e;
+      background: #fff5f5;
+    }
+
+    .form-group textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    .error-msg {
+      font-size: 0.73rem;
+      color: #e53e3e;
+      display: none;
+    }
+
+    .error-msg.show { display: block; }
+
+    .submit-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-top: auto;
+      padding-top: 18px;
+      border-top: 1px solid #e2e8f0;
+    }
+
+    .submit-note {
+      font-size: 0.73rem;
+      color: #a0aec0;
+      max-width: 320px;
+      line-height: 1.5;
+    }
+
+    .submit-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: linear-gradient(135deg, #1a3a7a, #0f2a62);
+      color: #ffffff;
+      border: none;
+      border-radius: 10px;
+      padding: 12px 26px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: opacity 0.2s, transform 0.1s;
+    }
+
+    .submit-btn:hover { opacity: 0.92; transform: translateY(-1px); }
+    .submit-btn:active { transform: translateY(0); }
+
+    /* CALENDAR SECTION */
+    .cal-section {
+      display: none;
+      flex-direction: column;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    .cal-section.show {
+      display: flex;
+    }
+
+    .cal-header {
+      padding: 18px 28px;
+      border-bottom: 1px solid #e2e8f0;
+      background: #f8fafc;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .cal-header-left h4 {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #0f2a62;
+      margin-bottom: 2px;
+    }
+
+    .cal-header-left p {
+      font-size: 0.75rem;
+      color: #718096;
+    }
+
+    .back-btn {
+      font-size: 0.78rem;
+      color: #0f2a62;
+      background: none;
+      border: 1.5px solid #0f2a62;
+      border-radius: 6px;
+      padding: 6px 14px;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .back-btn:hover {
+      background: #0f2a62;
+      color: #fff;
+    }
+
+    /* Applicant strip */
+    .applicant-strip {
+      display: flex;
+      gap: 24px;
+      padding: 10px 28px;
+      background: #eef2fb;
+      border-bottom: 1px solid #dde5f5;
+      flex-wrap: wrap;
+    }
+
+    .strip-item {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+    }
+
+    .strip-label {
+      font-size: 0.65rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: #6366f1;
+    }
+
+    .strip-value {
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: #1e3a8a;
+    }
+
+    /* Cal wrap — clips iframe left panel */
+    .cal-wrap {
+      flex: 1;
+      width: 100%;
+      min-height: 560px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Shift the iframe left to hide Cal.com's own left info panel,
+       then compensate width so the calendar grid still fills the space */
+    .cal-wrap > [data-cal-link] {
+      position: absolute;
+      top: 0;
+      left: -260px;
+      right: 0;
+      bottom: 0;
+      width: calc(100% + 260px);
+    }
+
+    .cal-wrap iframe {
+      width: calc(100% + 260px) !important;
+      height: 100% !important;
+      min-height: 560px;
+      border: none !important;
+      display: block;
+      margin-left: -260px;
+    }
+
+    /* PAGE FOOTER */
+    .page-footer {
+      margin-top: 20px;
+      font-size: 0.72rem;
+      color: #8a9ab5;
+      text-align: center;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 760px) {
+      .card { flex-direction: column; }
+      .left { width: 100%; padding: 24px 20px; }
+      .form-section { padding: 24px 20px; }
+      .form-grid { grid-template-columns: 1fr; }
+      .submit-row { flex-direction: column; align-items: stretch; }
+      .submit-btn { justify-content: center; }
+      .cal-section { min-height: 520px; }
+      .cal-wrap > [data-cal-link] { left: -180px; width: calc(100% + 180px); }
+      .cal-wrap iframe { width: calc(100% + 180px) !important; margin-left: -180px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="card">
+
+  <!-- LEFT PANEL -->
+  <div class="left">
+
+    <div class="logo-pill">
+      <img src="https://gramansgroup.github.io/applicant-calendar/gramans-logo.jpg"
+           onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
+           alt="Gramans Group">
+      <span style="display:none; font-weight:700; color:#0f2a62; font-size:1rem; letter-spacing:0.04em;">GRAMANS GROUP</span>
+    </div>
+
+    <div class="left-heading">
+      <h2>Interview Scheduling</h2>
+      <p>Book a time that works for you. We look forward to meeting you.</p>
+    </div>
+
+    <div class="left-divider"></div>
+
+    <ul class="info-list">
+      <li class="info-item">
+        <div class="info-icon">💻</div>
+        <div>
+          <div class="info-label">Format</div>
+          <div class="info-value">Video Call (Google Meet)</div>
+        </div>
+      </li>
+      <li class="info-item">
+        <div class="info-icon">🏢</div>
+        <div>
+          <div class="info-label">Team</div>
+          <div class="info-value">Talent Acquisition</div>
+        </div>
+      </li>
+      <li class="info-item">
+        <div class="info-icon">🔒</div>
+        <div>
+          <div class="info-label">Confidentiality</div>
+          <div class="info-value">Private &amp; Secure</div>
+        </div>
+      </li>
+    </ul>
+
+    <div class="left-footer">
+      <p>Questions? Email us at<br>
+      <a href="mailto:hr@gramansgroup.com">hr@gramansgroup.com</a></p>
+    </div>
+  </div><!-- /.left -->
+
+  <!-- RIGHT PANEL -->
+  <div class="right">
+
+    <!-- STEP 1: APPLICANT DETAILS FORM -->
+    <div class="form-section" id="formSection">
+      <h3>Your Details</h3>
+      <p class="form-subtitle">Please fill in your information before selecting a time slot. All fields marked <span style="color:#e53e3e">*</span> are required.</p>
+
+      <div class="form-grid">
+
+        <div class="form-group">
+          <label>Full Name <span class="required">*</span></label>
+          <input type="text" id="fullName" placeholder="e.g. Juan dela Cruz" autocomplete="name">
+          <span class="error-msg" id="fullNameErr">Please enter your full name.</span>
+        </div>
+
+        <div class="form-group">
+          <label>Email Address <span class="required">*</span></label>
+          <input type="email" id="email" placeholder="e.g. juan@email.com" autocomplete="email">
+          <span class="error-msg" id="emailErr">Please enter a valid email address.</span>
+        </div>
+
+        <div class="form-group">
+          <label>Phone Number <span class="required">*</span></label>
+          <input type="tel" id="phone" placeholder="e.g. +63 917 123 4567" autocomplete="tel">
+          <span class="error-msg" id="phoneErr">Please enter your phone number.</span>
+        </div>
+
+        <div class="form-group full">
+          <label>Position Applying For <span class="required">*</span></label>
+          <input type="text" id="position" placeholder="e.g. Software Developer, HR Manager, Accountant">
+          <span class="error-msg" id="positionErr">Please enter the position you are applying for.</span>
+        </div>
+
+        <div class="form-group full">
+          <label>Additional Notes</label>
+          <textarea id="notes" placeholder="Any additional information you'd like us to know — availability constraints, accommodation needs, etc."></textarea>
+        </div>
+
+      </div>
+
+      <div class="submit-row">
+        <p class="submit-note">Your information is kept strictly confidential and used only for the interview scheduling process.</p>
+        <button class="submit-btn" id="proceedBtn" onclick="handleProceed()">
+          Proceed to Calendar &nbsp;→
+        </button>
+      </div>
+
+    </div><!-- /#formSection -->
+
+    <!-- STEP 2: CALENDAR -->
+    <div class="cal-section" id="calSection">
+
+      <div class="cal-header">
+        <div class="cal-header-left">
+          <h4>Select Your Interview Slot</h4>
+          <p>Choose a date and time that works best for you.</p>
+        </div>
+        <button class="back-btn" onclick="goBack()">← Back</button>
+      </div>
+
+      <div class="applicant-strip" id="applicantStrip">
+        <div class="strip-item">
+          <span class="strip-label">Name</span>
+          <span class="strip-value" id="stripName">—</span>
+        </div>
+        <div class="strip-item">
+          <span class="strip-label">Email</span>
+          <span class="strip-value" id="stripEmail">—</span>
+        </div>
+        <div class="strip-item">
+          <span class="strip-label">Position</span>
+          <span class="strip-value" id="stripPosition">—</span>
+        </div>
+      </div>
+
+      <!-- Cal.com inline embed -->
+      <div class="cal-wrap">
+        <div
+          data-cal-link="gramanshr-careers/interview-scheduling"
+          data-cal-namespace="interview-scheduling"
+          data-cal-config='{"layout":"month_view","theme":"light"}'
+        ></div>
+      </div>
+
+    </div><!-- /#calSection -->
+
+  </div><!-- /.right -->
+
+</div><!-- /.card -->
+
+<div class="page-footer">
+  &copy; <span id="yr"></span> Gramans Group &mdash; Confidential
+</div>
+
+<script>
+  document.getElementById('yr').textContent = new Date().getFullYear();
+
+  function validate() {
+    let valid = true;
+    const fields = [
+      { id: 'fullName', errId: 'fullNameErr', check: v => v.trim().length >= 2 },
+      { id: 'email',    errId: 'emailErr',    check: v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()) },
+      { id: 'phone',    errId: 'phoneErr',    check: v => v.trim().length >= 7 },
+      { id: 'position', errId: 'positionErr', check: v => v.trim().length >= 2 },
+    ];
+    fields.forEach(f => {
+      const el  = document.getElementById(f.id);
+      const err = document.getElementById(f.errId);
+      if (!f.check(el.value)) {
+        el.classList.add('error');
+        err.classList.add('show');
+        valid = false;
+      } else {
+        el.classList.remove('error');
+        err.classList.remove('show');
+      }
+    });
+    return valid;
+  }
+
+  let calInited = false;
+  let applicantName  = '';
+  let applicantEmail = '';
+
+  function handleProceed() {
+    if (!validate()) {
+      document.querySelector('.form-group input.error, .form-group select.error')
+        ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+
+    applicantName  = document.getElementById('fullName').value.trim();
+    applicantEmail = document.getElementById('email').value.trim();
+    const position = document.getElementById('position').value.trim();
+
+    document.getElementById('stripName').textContent     = applicantName;
+    document.getElementById('stripEmail').textContent    = applicantEmail;
+    document.getElementById('stripPosition').textContent = position;
+
+    document.getElementById('formSection').style.display = 'none';
+    const cal = document.getElementById('calSection');
+    cal.classList.add('show');
+
+    initCal();
+  }
+
+  function goBack() {
+    document.getElementById('calSection').classList.remove('show');
+    document.getElementById('formSection').style.display = 'flex';
+    document.getElementById('formSection').style.flexDirection = 'column';
+  }
+
+  function initCal() {
+    if (calInited) return;
+    calInited = true;
+
+    (function (C, A, L) {
+      let p = function (a, ar) { a.q.push(ar); };
+      let d = C.document;
+      C.Cal = C.Cal || function () {
+        let cal = C.Cal; let ar = arguments;
+        if (!cal.loaded) {
+          cal.ns = {}; cal.q = cal.q || [];
+          d.head.appendChild(d.createElement("script")).src = A;
+          cal.loaded = true;
+        }
+        if (ar[0] === L) {
+          const api = function () { p(api, arguments); };
+          const namespace = ar[1];
+          api.q = api.q || [];
+          if (typeof namespace === "string") {
+            cal.ns[namespace] = cal.ns[namespace] || api;
+            p(cal.ns[namespace], ar);
+            p(cal, ["initNamespace", namespace]);
+          } else p(cal, ar);
+          return;
+        }
+        p(cal, ar);
+      };
+    })(window, "https://app.cal.com/embed/embed.js", "init");
+
+    Cal("init", "interview-scheduling", { origin: "https://cal.com" });
+
+    Cal.ns["interview-scheduling"]("inline", {
+      elementOrSelector: "[data-cal-link='gramanshr-careers/interview-scheduling']",
+      calLink: "gramanshr-careers/interview-scheduling",
+      layout: "month_view",
+      config: {
+        name: applicantName,
+        email: applicantEmail,
+      }
+    });
+
+    Cal.ns["interview-scheduling"]("ui", {
+      theme: "light",
+      hideEventTypeDetails: true,
+      layout: "month_view",
+      cssVarsPerTheme: {
+        light: {
+          "cal-brand":          "#0f2a62",
+          "cal-brand-emphasis": "#0a1f50",
+          "cal-brand-text":     "#ffffff",
+        }
+      }
+    });
+  }
+
+  ['fullName','email','phone','position'].forEach(id => {
+    const el = document.getElementById(id);
+    el.addEventListener('input', () => {
+      el.classList.remove('error');
+      document.getElementById(id + 'Err') && document.getElementById(id + 'Err').classList.remove('show');
+    });
+    el.addEventListener('change', () => {
+      el.classList.remove('error');
+      document.getElementById(id + 'Err') && document.getElementById(id + 'Err').classList.remove('show');
+    });
+  });
+</script>
+</body>
+</html>
